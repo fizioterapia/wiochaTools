@@ -34,6 +34,6 @@ function wT:Search(dir)
     end
 end
 
-hook.Add("InitPostEntity", function()
+hook.Add("InitPostEntity", "wiochaTools::Load", function()
 	wT:Search("wiocha/")
 end)
