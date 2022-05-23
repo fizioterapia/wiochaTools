@@ -234,7 +234,7 @@ function wHUD.Draw()
 
     wHUD.Text("wiochaHUD", "wHUD.Font", 8, 8, HSVToColor((CurTime() * 5) % 360, 1, 1), wHUD.c.black)
     if lp:GetNWBool("_Kyle_Buildmode") then
-        wHUD.Text("Build Mode", "wHUD.Font.Small", 8, 32, wHUD.c.red, wHUD.c.black)
+        wHUD.Text("Build Mode", "wHUD.Font.Small", 8, 32, wHUD.c.blue, wHUD.c.black)
     else
         wHUD.Text("PVP Mode", "wHUD.Font.Small", 8, 32, wHUD.c.red, wHUD.c.black)
     end
@@ -309,7 +309,7 @@ function wHUD.Player(ply)
     draw.SimpleTextOutlined(ply:Health() .. " HP", "wHUD.Font.Player.Small", 0, 232, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
     if ply:GetNWBool("_Kyle_Buildmode") then
-        draw.SimpleTextOutlined("Build Mode", "wHUD.Font.Player.Small", 0, 260, wHUD.c.red, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+        draw.SimpleTextOutlined("Build Mode", "wHUD.Font.Player.Small", 0, 260, wHUD.c.blue, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
     else
         draw.SimpleTextOutlined("PVP Mode", "wHUD.Font.Player.Small", 0, 260, wHUD.c.red, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
     end
