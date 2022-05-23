@@ -1,3 +1,5 @@
+wHUD = {}
+
 surface.CreateFont("wHUD.Font.Player", {
     font = "Inter",
     size = 48,
@@ -30,14 +32,17 @@ surface.CreateFont("wHUD.Font.Small", {
     antialias = true
 })
 
-wHUD = {}
-
 wHUD.c = {
     ["white"] = Color(255, 255, 255),
     ["black"] = Color(0, 0, 0),
-    ["blacka"] = Color(0, 0, 0, 200)
+    ["blacka"] = Color(0, 0, 0, 200),
+    ["blue"] = Color(73, 106, 255),
+    ["red"] = Color(255, 73, 73)
 }
 
+local lp = LocalPlayer()
+
+-- drawing functions
 function wHUD.Text(txt, font, x, y, col, outlinecol)
     if outlinecol then
         draw.SimpleTextOutlined(txt, font, x, y, col, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, outlinecol)
@@ -67,34 +72,7 @@ function wHUD.TextSize(txt, font)
     }
 end
 
-function wHUD.DrawEnt()
-    local lp = LocalPlayer()
-    local ent = lp:GetEyeTrace().Entity
-
-    if IsValid(ent) and not ent:IsPlayer() then
-        local scrh = ScrH()
-        local owner = ""
-
-        if IsValid(ent:CPPIGetOwner()) then
-            owner = ent:CPPIGetOwner():Name()
-        else
-            owner = "NULL"
-        end
-
-        local output = ""
-        output = output .. "CLASS: " .. ent:GetClass() .. "\n"
-        output = output .. "MODEL: " .. ent:GetModel() .. "\n"
-        output = output .. "OWNER: " .. owner .. "\n"
-        output = output .. "POS: " .. string.format("Vector(%f, %f, %f)", ent:GetPos().x, ent:GetPos().y, ent:GetPos().z) .. "\n"
-        output = output .. "ANG: " .. string.format("Angle(%f, %f, %f)", ent:GetAngles().pitch, ent:GetAngles().yaw, ent:GetAngles().roll) .. "\n"
-		output = output .. "GRAVITY: " .. ent:GetGravity()
-        
-
-        local boxsize = wHUD.TextSize(output, "wHUD.Font.Small")
-        wHUD.Box(8, (scrh / 2) - boxsize.h / 2 - 8, boxsize.w + 16, boxsize.h + 16, wHUD.c.blacka)
-        draw.DrawText(output, "wHUD.Font.Small", 16, (scrh / 2) - (boxsize.h / 2), wHUD.c.white)
-    end
-end
+-- adverts
 
 wHUD.AdvertsTbl = {
 	{
@@ -147,8 +125,9 @@ function wHUD.Adverts()
 	end
 end
 
+-- hooks
+-- 2d
 function wHUD.DrawAmmo()
-	local lp = LocalPlayer()
     local wep = lp:GetActiveWeapon()
     if !IsValid(wep) then return false end
 
@@ -246,18 +225,18 @@ function wHUD.Restart()
 end
 
 function wHUD.Draw()
+    if !IsValid(lp) then lp = LocalPlayer() end
+
     local scrw = ScrW()
     local scrh = ScrH()
-    local lp = LocalPlayer()
     local velocity = lp:GetVelocity()
     velocity = velocity:Length()
-    //velocity = math.abs(velocity.x) + math.abs(velocity.y) + math.abs(velocity.z)
 
     wHUD.Text("wiochaHUD", "wHUD.Font", 8, 8, HSVToColor((CurTime() * 5) % 360, 1, 1), wHUD.c.black)
     if lp:GetNWBool("_Kyle_Buildmode") then
-        draw.SimpleTextOutlined("Build Mode", "wHUD.Font.Small", 8, 32, Color(73, 106, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+        wHUD.Text("Build Mode", "wHUD.Font.Small", 8, 32, wHUD.c.red, wHUD.c.black)
     else
-        draw.SimpleTextOutlined("PVP Mode", "wHUD.Font.Small", 8, 32, Color(255, 73, 73), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+        wHUD.Text("PVP Mode", "wHUD.Font.Small", 8, 32, wHUD.c.red, wHUD.c.black)
     end
     wHUD.Text("alpha - 0.1.1", "wHUD.Font.Small", 8, 46, wHUD.c.white, wHUD.c.black)
     wHUD.Text("#makelovenotwar", "wHUD.Font.Small", 8, 60, wHUD.c.white, wHUD.c.black)
@@ -279,8 +258,36 @@ function wHUD.Draw()
     wHUD.Restart()
 end
 
+-- 3d2d
+function wHUD.DrawEnt()
+    local ent = lp:GetEyeTrace().Entity
+
+    if IsValid(ent) and not ent:IsPlayer() then
+        local scrh = ScrH()
+        local owner = ""
+
+        if IsValid(ent:CPPIGetOwner()) then
+            owner = ent:CPPIGetOwner():Name()
+        else
+            owner = "NULL"
+        end
+
+        local output = ""
+        output = output .. "CLASS: " .. ent:GetClass() .. "\n"
+        output = output .. "MODEL: " .. ent:GetModel() .. "\n"
+        output = output .. "OWNER: " .. owner .. "\n"
+        output = output .. "POS: " .. string.format("Vector(%f, %f, %f)", ent:GetPos().x, ent:GetPos().y, ent:GetPos().z) .. "\n"
+        output = output .. "ANG: " .. string.format("Angle(%f, %f, %f)", ent:GetAngles().pitch, ent:GetAngles().yaw, ent:GetAngles().roll) .. "\n"
+		output = output .. "GRAVITY: " .. ent:GetGravity()
+        
+
+        local boxsize = wHUD.TextSize(output, "wHUD.Font.Small")
+        wHUD.Box(8, (scrh / 2) - boxsize.h / 2 - 8, boxsize.w + 16, boxsize.h + 16, wHUD.c.blacka)
+        draw.DrawText(output, "wHUD.Font.Small", 16, (scrh / 2) - (boxsize.h / 2), wHUD.c.white)
+    end
+end
+
 function wHUD.Player(ply)
-    local lp = LocalPlayer()
     local pos = ply:EyePos() or ply:GetPos()
     pos.z = pos.z + 36
 
@@ -302,16 +309,15 @@ function wHUD.Player(ply)
     draw.SimpleTextOutlined(ply:Health() .. " HP", "wHUD.Font.Player.Small", 0, 232, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
     if ply:GetNWBool("_Kyle_Buildmode") then
-        draw.SimpleTextOutlined("Build Mode", "wHUD.Font.Player.Small", 0, 260, Color(73, 106, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+        draw.SimpleTextOutlined("Build Mode", "wHUD.Font.Player.Small", 0, 260, wHUD.c.red, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
     else
-        draw.SimpleTextOutlined("PVP Mode", "wHUD.Font.Player.Small", 0, 260, Color(255, 73, 73), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+        draw.SimpleTextOutlined("PVP Mode", "wHUD.Font.Player.Small", 0, 260, wHUD.c.red, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
     end
 
     cam.End3D2D()
 end
 
 function wHUD.DrawPlayerInfo()
-    local lp = LocalPlayer()
     if not lp or not IsValid(lp) then return end
     local shootPos = lp:GetShootPos()
     local aimVec = lp:GetAimVector()
@@ -341,10 +347,7 @@ function wHUD.DrawPlayerInfo()
     end
 end
 
-hook.Add("PostDrawTranslucentRenderables", "wHUD.DrawPlayerInfo", wHUD.DrawPlayerInfo)
-hook.Add("HUDPaint", "wHUD.Draw", wHUD.Draw)
 
--- disable gmod hud
 local hide = {
     ["CHudHealth"] = true,
     ["CHudBattery"] = true,
@@ -355,5 +358,6 @@ local hide = {
 hook.Add("HUDShouldDraw", "HideHUD", function(name)
     if hide[name] then return false end
 end)
-
 hook.Add("HUDDrawTargetID", "HideHUD", function() return false end)
+hook.Add("PostDrawTranslucentRenderables", "wHUD.DrawPlayerInfo", wHUD.DrawPlayerInfo)
+hook.Add("HUDPaint", "wHUD.Draw", wHUD.Draw)
