@@ -2,7 +2,7 @@ local plyMeta = FindMetaTable("Player")
 
 function plyMeta:GetTokens()
     if !IsValid(self) then return end
-    return self:GetNWInt("WTokens", 0)
+    return self:GetNWInt("WTokens", self:GetPData("WTokens") or 0)
 end
 
 function plyMeta:Pay(player, amount)
@@ -28,7 +28,6 @@ function plyMeta:AddTokens(amount)
     if !IsValid(self) then return end
 
     self:SetTokens(self:GetTokens() + amount)
-    self:SetPData("WTokens", self:GetTokens())
 
     if amount > 0 then
         self:wText(string.format("Otrzymałeś %d tokenów.", amount))

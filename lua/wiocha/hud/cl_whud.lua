@@ -186,19 +186,20 @@ function wHUD.Restart()
     local hours = math.floor(minutes / 60)
     minutes = minutes - (hours * 60)
 
-    if seconds < 10 then
+    if seconds < 10 and seconds > 0 then
         seconds = "0" .. seconds
     end
 
-    if minutes < 10 then
+    if minutes < 10 and minutes > 0 then
         minutes = "0" .. minutes
     end
 
-    if hours < 10 then
+    if hours < 10 and hours > 0 then
         hours = "0" .. hours
     end
 
-    draw.SimpleTextOutlined(string.format("restart in: %s:%s:%s (pl time)", hours, minutes, seconds), "wHUD.Font", ScrW() / 2, 16, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, wHUD.c.black)
+    wHUD.Box(ScrW() / 2 - 100, 12, 200, 32, wHUD.c.blacka)
+    draw.SimpleTextOutlined(string.format("restart za: %s:%s:%s", hours, minutes, seconds), "wHUD.Font", ScrW() / 2, 16, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, wHUD.c.black)
 
 end
 
@@ -218,7 +219,7 @@ function wHUD.Draw()
     end
     wHUD.Text("alpha - 0.1.1", "wHUD.Font.Small", 8, 46, wHUD.c.white, wHUD.c.black)
     wHUD.Text("#makelovenotwar", "wHUD.Font.Small", 8, 60, wHUD.c.white, wHUD.c.black)
-    wHUD.Text(string.format("velocity: %d", velocity), "wHUD.Font.Small", 8, 74, wHUD.c.white, wHUD.c.black)
+    wHUD.Text(string.format("velocity: %d", math.ceil(velocity)), "wHUD.Font.Small", 8, 74, wHUD.c.white, wHUD.c.black)
 
 	-- ammo
 	wHUD.DrawAmmo()
@@ -255,8 +256,7 @@ function wHUD.DrawEnt()
         output = output .. "MODEL: " .. ent:GetModel() .. "\n"
         output = output .. "OWNER: " .. owner .. "\n"
         output = output .. "POS: " .. string.format("Vector(%f, %f, %f)", ent:GetPos().x, ent:GetPos().y, ent:GetPos().z) .. "\n"
-        output = output .. "ANG: " .. string.format("Angle(%f, %f, %f)", ent:GetAngles().pitch, ent:GetAngles().yaw, ent:GetAngles().roll) .. "\n"
-		output = output .. "GRAVITY: " .. ent:GetGravity()
+        output = output .. "ANG: " .. string.format("Angle(%f, %f, %f)", ent:GetAngles().pitch, ent:GetAngles().yaw, ent:GetAngles().roll)
         
 
         local boxsize = wHUD.TextSize(output, "wHUD.Font.Small")
@@ -347,3 +347,6 @@ end)
 net.Receive("wHUD_RestartTime", function(len)
     wHUD.RestartTime = net.ReadInt(32)
 end)
+
+net.Start("wHUD_RestartTime")
+net.SendToServer()

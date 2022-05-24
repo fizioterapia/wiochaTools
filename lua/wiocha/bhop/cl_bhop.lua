@@ -1,4 +1,4 @@
-local bhop_convar = CreateClientConVar( "auto_bhop", "1", true, false )
+local bhop_convar = CreateClientConVar( "auto_bhop", "0", true, false )
 
 hook.Add("CreateMove","bizzahop",function( cmd )
 	if bhop_convar:GetInt() == 1 then

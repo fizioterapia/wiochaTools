@@ -37,3 +37,10 @@ net.Receive("wHUD_RestartTime", function(len, ply)
         net.WriteInt(time, 32)
     net.Send(ply)
 end)
+
+hook.Add("Think", "wHUD::RestartCountdown", function()
+    if os.date("%H:%M:%S", os.time()) == "02:55:00" then
+        wT:SetCountdown("Restart Serwera", 300, "https://fizi.pw/blossom-network/minimalistic-ls/lubudubu.mp3")
+        hook.Remove("Think", "wHUD::RestartCountdown")
+    end
+end)

@@ -16,6 +16,13 @@ if SERVER then
             net.WriteBool(true)
         net.Send(self)
     end
+
+    function wT:Broadcast(str)
+        net.Start("WiochaTools_Print")
+            net.WriteString(str)
+            net.WriteBool(true)
+        net.Broadcast()
+    end
 else
     function wT.ReadMsg(len)
         local str = net.ReadString()
