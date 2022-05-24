@@ -1,18 +1,3 @@
-/*
-function wT.SetupCountdown(len)
-    local data = net.ReadInt(16)
-    local title = net.ReadString()
-
-    wT.CountdownActive = true
-    wT.CountdownDuration = duration
-    wT.CountdownFrom = CurTime()
-    wT.CountdownTo = CurTime() + wT.CountdownDuration
-    wT.CountdownTitle = title
-end
-
-net.Receive("wiochaTools_Countdown", wT.SetupCountdown)
-*/
-
 util.AddNetworkString("wiochaTools_Countdown")
 
 wT.CountdownActive = false
@@ -22,6 +7,8 @@ wT.CountdownDuration = 0
 wT.CountdownTitle = ""
 
 function wT:SetCountdown(title, duration, audio)
+    if wT.CountdownActive and wT.CountdownTo > CurTime() then return end
+
     wT.CountdownActive = true
     wT.CountdownTitle = title
     wT.CountdownDuration = duration
@@ -34,6 +21,16 @@ function wT:SetCountdown(title, duration, audio)
         net.WriteString(wT.CountdownTitle)
         net.WriteString(wT.CountdownAudio)
     net.Broadcast()
+end
+
+function wT:StopCountdown()
+    net.Start("wiochaTools_Countdown")
+        net.WriteInt(0, 16)
+        net.WriteString("")
+        net.WriteString("")
+    net.Broadcast()
+
+    wT.CountdownActive = false
 end
 
 function wT.CheckCountdown(len, ply)

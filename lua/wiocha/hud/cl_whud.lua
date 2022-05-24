@@ -217,7 +217,7 @@ function wHUD.Draw()
     else
         wHUD.Text("PVP Mode", "wHUD.Font.Small", 8, 32, wHUD.c.red, wHUD.c.black)
     end
-    wHUD.Text("alpha - 0.1.1", "wHUD.Font.Small", 8, 46, wHUD.c.white, wHUD.c.black)
+    wHUD.Text("alpha - 0.1.3", "wHUD.Font.Small", 8, 46, wHUD.c.white, wHUD.c.black)
     wHUD.Text("#makelovenotwar", "wHUD.Font.Small", 8, 60, wHUD.c.white, wHUD.c.black)
     wHUD.Text(string.format("velocity: %d", math.ceil(velocity)), "wHUD.Font.Small", 8, 74, wHUD.c.white, wHUD.c.black)
 
@@ -340,8 +340,8 @@ hook.Add("HUDDrawTargetID", "HideHUD", function() return false end)
 hook.Add("PostDrawTranslucentRenderables", "wHUD.DrawPlayerInfo", wHUD.DrawPlayerInfo)
 hook.Add("HUDPaint", "wHUD.Draw", wHUD.Draw)
 hook.Add("InitPostEntity", "wHUD::Time", function()
-    net.Start("wHUD_RestartTime")
-    net.SendToServer()
+        net.Start("wHUD_RestartTime")
+        net.SendToServer()
 end)
 
 net.Receive("wHUD_RestartTime", function(len)

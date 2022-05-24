@@ -6,14 +6,17 @@ function plyMeta:GetTokens()
 end
 
 function plyMeta:Pay(player, amount)
-    if !IsValid(self) or !IsValid(player) then return end
-    if self:GetTokens() < amount then return end
+    if !IsValid(self) or !IsValid(player) then self:wText("Nie ma takiego użytkownika na serwerze.") return false end
+    if player == self then self:wText("Nie możesz wysłać tokenów do samego siebie.") return false end
+    if self:GetTokens() < amount then self:wText("Nie masz wystarczająco tokenów.") return false end
 
     player:AddTokens(amount)
     self:AddTokens(-amount)
 
     self:wText(string.format("Przekazałeś %s %d tokenów.", player:Name(), amount))
     player:wText(string.format("Otrzymałeś %d tokenów od %s.", amount, self:Name()))
+
+    return true
 end
 
 function plyMeta:SetTokens(amount)
@@ -42,8 +45,33 @@ function wT.SaveTokens(ply)
 end
 
 function wT.LoadTokens(ply)
-    ply:SetTokens("WTokens", ply:GetPData("WTokens"))
+    local tokens = ply:GetPData("WTokens")
+    ply:SetTokens(tokens)
 end
 
+if SERVER then
+    wT.PayCmds = {
+        "!pay",
+        "!paytokens",
+        "!zaplac",
+        "!zaplactokeny",
+        "!givetokens"
+    }
+    function wT.Pay(ply, text, team)
+        txt = string.Split(text, " ")
+        if (#txt >= 3 and table.HasValue(wT.PayCmds, txt[1])) then
+            local amount = tonumber(txt[3])
+            local receiver
+
+            for k,v in ipairs(player.GetAll()) do
+                if !IsValid(v) then continue end
+                if string.match(v:Name(), txt[2]) then receiver = v end
+            end
+
+            ply:Pay(receiver, amount)
+        end
+    end
+end
+hook.Add("PlayerSay", "wT::TypingGame", wT.Pay)
 hook.Add("PlayerDisconnected", "wiochaTools::SaveMoney", wT.SaveTokens)
 hook.Add("PlayerInitialSpawn", "wiochaTools::LoadMoney", wT.LoadTokens)

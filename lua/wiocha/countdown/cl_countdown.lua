@@ -10,13 +10,13 @@ wT.CountdownTo = CurTime()
 wT.CountdownTitle = ""
 
 function wT.DrawCountdown()
-    if !wT.CountdownActive or (wT.CountdownTo - CurTime() < 0) then 
+    if !wT.CountdownActive or (wT.CountdownTo - CurTime() < 0) then
         wT.CountdownActive = false
-        if wT.CountdownSound and IsValid(wT.CountdownSound) then 
+        if wT.CountdownSound and IsValid(wT.CountdownSound) then
             wT.CountdownSound:Stop()
             wT.CountdownSound = nil
         end
-        return 
+        return
     end
 
     local progress = 1 - (wT.CountdownTo - CurTime()) / wT.CountdownDuration
@@ -50,13 +50,17 @@ function wT.SetupCountdown(len)
             if IsValid(snd) then
                 wT.CountdownSound = snd
                 wT.CountdownSound:Play()
+                wT.CountdownSound:SetVolume(0.25)
             end
         end)
     end
 end
 
 net.Receive("wiochaTools_Countdown", wT.SetupCountdown)
+
 hook.Add("InitPostEntity", "wiochaTools::CheckCountdown", function()
-    net.Start("wiochaTools_Countdown")
-    net.SendToServer()
+    timer.Simple(5, function()
+        net.Start("wiochaTools_Countdown")
+        net.SendToServer()
+    end)
 end)
