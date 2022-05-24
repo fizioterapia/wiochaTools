@@ -186,15 +186,15 @@ function wHUD.Restart()
     local hours = math.floor(minutes / 60)
     minutes = minutes - (hours * 60)
 
-    if seconds < 10 and seconds > 0 then
+    if seconds < 10 and seconds >= 0 then
         seconds = "0" .. seconds
     end
 
-    if minutes < 10 and minutes > 0 then
+    if minutes < 10 and minutes >= 0 then
         minutes = "0" .. minutes
     end
 
-    if hours < 10 and hours > 0 then
+    if hours < 10 and hours >= 0 then
         hours = "0" .. hours
     end
 

@@ -40,7 +40,7 @@ end)
 
 hook.Add("Think", "wHUD::RestartCountdown", function()
     if os.date("%H:%M:%S", os.time()) == "02:55:00" then
-        wT:SetCountdown("Restart Serwera", 300, "https://fizi.pw/blossom-network/minimalistic-ls/lubudubu.mp3")
+        wT:SetCountdown("Restart Serwera", 300, "https://wolfyo.eu/errors/cykaa_real.mp3")
         hook.Remove("Think", "wHUD::RestartCountdown")
     end
 end)
