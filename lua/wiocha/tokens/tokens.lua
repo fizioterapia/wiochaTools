@@ -6,6 +6,7 @@ function plyMeta:GetTokens()
 end
 
 function plyMeta:Pay(player, amount)
+    if amount < 0 then self:wText("Co robisz ty penisie!") return false end
     if !IsValid(self) or !IsValid(player) then self:wText("Nie ma takiego użytkownika na serwerze.") return false end
     if player == self then self:wText("Nie możesz wysłać tokenów do samego siebie.") return false end
     if self:GetTokens() < amount then self:wText("Nie masz wystarczająco tokenów.") return false end
@@ -65,13 +66,13 @@ if SERVER then
 
             for k,v in ipairs(player.GetAll()) do
                 if !IsValid(v) then continue end
-                if string.match(v:Name(), txt[2]) then receiver = v end
+                if string.match(string.lower(v:Name()), string.lower(txt[2])) then receiver = v end
             end
 
             ply:Pay(receiver, amount)
         end
     end
 end
-hook.Add("PlayerSay", "wT::TypingGame", wT.Pay)
+hook.Add("PlayerSay", "wT::Pay", wT.Pay)
 hook.Add("PlayerDisconnected", "wiochaTools::SaveMoney", wT.SaveTokens)
 hook.Add("PlayerInitialSpawn", "wiochaTools::LoadMoney", wT.LoadTokens)
