@@ -37,7 +37,8 @@ wHUD.c = {
     ["black"] = Color(0, 0, 0),
     ["blacka"] = Color(0, 0, 0, 200),
     ["blue"] = Color(73, 106, 255),
-    ["red"] = Color(255, 73, 73)
+    ["red"] = Color(255, 73, 73),
+    ["green"] = Color(73, 255, 88)
 }
 
 local lp = LocalPlayer()
@@ -83,12 +84,12 @@ wHUD.AdvertsTbl = {
 	{
 		title = "Build-Mode",
 		content = "Napisz !build aby włączyć build-mode lub !pvp aby zacząć się zabijać.",
-		col = Color(39,133,209)
+		col = wHUD.c.green
 	},
     {
         title = "Bhop?",
         content = "Wpisz 'auto_bhop 1' w konsoli!",
-        col = Color(88, 242, 109)
+        col = wHUD.c.red
     }
 }
 wHUD.Advert = {}
@@ -119,9 +120,9 @@ function wHUD.Adverts()
 
 	if wHUD.Advert and wHUD.Advert.title and wHUD.Advert.content then
 		local boxsize = wHUD.TextSize(wHUD.Advert.content, "wHUD.Font.Small")
-		wHUD.Box(8, 104, boxsize.w + 32, 64, wHUD.c.blacka)
-		wHUD.Text(wHUD.Advert.title, "wHUD.Font", 16, 112, wHUD.Advert.col, wHUD.c.black)
-		wHUD.Text(wHUD.Advert.content, "wHUD.Font.Small", 16, 136, wHUD.c.white, wHUD.c.black)
+		wHUD.Box(8, 134, boxsize.w + 32, 64, wHUD.c.blacka)
+		wHUD.Text(wHUD.Advert.title, "wHUD.Font", 16, 142, wHUD.Advert.col, wHUD.c.black)
+		wHUD.Text(wHUD.Advert.content, "wHUD.Font.Small", 16, 166, wHUD.c.white, wHUD.c.black)
 	end
 end
 
@@ -211,15 +212,15 @@ function wHUD.Draw()
     local velocity = lp:GetVelocity()
     velocity = velocity:Length()
 
-    wHUD.Text("wiochaHUD", "wHUD.Font", 8, 8, HSVToColor((CurTime() * 5) % 360, 1, 1), wHUD.c.black)
+    wHUD.Text("wiochaHUD", "wHUD.Font.Player.Small", 8, 8, HSVToColor((CurTime() * 5) % 360, 1, 1), wHUD.c.black)
     if lp:GetNWBool("_Kyle_Buildmode") then
-        wHUD.Text("Build Mode", "wHUD.Font.Small", 8, 32, wHUD.c.blue, wHUD.c.black)
+        wHUD.Text("Build Mode", "wHUD.Font", 8, 32, wHUD.c.green, wHUD.c.black)
     else
-        wHUD.Text("PVP Mode", "wHUD.Font.Small", 8, 32, wHUD.c.red, wHUD.c.black)
+        wHUD.Text("PVP Mode", "wHUD.Font", 8, 32, wHUD.c.red, wHUD.c.black)
     end
-    wHUD.Text("alpha - 0.1.3", "wHUD.Font.Small", 8, 46, wHUD.c.white, wHUD.c.black)
-    wHUD.Text("#makelovenotwar", "wHUD.Font.Small", 8, 60, wHUD.c.white, wHUD.c.black)
-    wHUD.Text(string.format("velocity: %d", math.ceil(velocity)), "wHUD.Font.Small", 8, 74, wHUD.c.white, wHUD.c.black)
+    wHUD.Text("alpha - 0.1.3", "wHUD.Font.Small", 8, 54, wHUD.c.white, wHUD.c.black)
+    wHUD.Text("<wstaw jakiś śmieszny żart>", "wHUD.Font.Small", 8, 68, wHUD.c.white, wHUD.c.black)
+    wHUD.Text(string.format("velocity: %d", math.ceil(velocity)), "wHUD.Font.Small", 8, 82, wHUD.c.white, wHUD.c.black)
 
 	-- ammo
 	wHUD.DrawAmmo()
@@ -287,7 +288,7 @@ function wHUD.Player(ply)
     draw.SimpleTextOutlined(ply:Health() .. " HP", "wHUD.Font.Player.Small", 0, 232, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
     if ply:GetNWBool("_Kyle_Buildmode") then
-        draw.SimpleTextOutlined("Build Mode", "wHUD.Font.Player.Small", 0, 260, wHUD.c.blue, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+        draw.SimpleTextOutlined("Build Mode", "wHUD.Font.Player.Small", 0, 260, wHUD.c.green, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
     else
         draw.SimpleTextOutlined("PVP Mode", "wHUD.Font.Player.Small", 0, 260, wHUD.c.red, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
     end
