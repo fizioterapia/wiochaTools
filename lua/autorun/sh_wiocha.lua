@@ -1,6 +1,8 @@
 wT = wT or {}
 
 function wT:Include(fileName, path)
+    if string.sub(fileName, -3) != "lua" then return end
+
     print("[wiochaTools] - Including " .. path .. fileName)
     if string.match(fileName, "cl_") then
         if CLIENT then
