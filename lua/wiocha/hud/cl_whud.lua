@@ -231,8 +231,8 @@ function wHUD.Draw()
     -- player info	
     local boxsize = wHUD.TextSize(lp:Name(), "wHUD.Font")
     wHUD.Box(8, scrh - 72, math.max(200, boxsize.w + 16), 64, wHUD.c.blacka)
-    wHUD.Text(lp:Name(), "wHUD.Font", 16, scrh - 68, team.GetColor(LocalPlayer():Team()) or wHUD.c.white, wHUD.c.black)
-    wHUD.Text(string.format("HEALTH: %d", lp:Health()), "wHUD.Font.Small", 16, scrh - 42, wHUD.c.white, wHUD.c.black)
+    wHUD.Text(lp:Name(), "wHUD.Font", 16, scrh - 70, team.GetColor(LocalPlayer():Team()) or wHUD.c.white, wHUD.c.black)
+    wHUD.Text(string.format("HEALTH: %d", lp:Health()), "wHUD.Font.Small", 16, scrh - 46, wHUD.c.white, wHUD.c.black)
     wHUD.Text(string.format("ARMOR: %d", lp:Armor()), "wHUD.Font.Small", 16, scrh - 30, wHUD.c.white, wHUD.c.black)
     -- restart
     wHUD.Restart()
