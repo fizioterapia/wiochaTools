@@ -1,7 +1,3 @@
-/*
-    TODO
-*/
-
 wT.Motd = wT.Motd or {}
 
 surface.CreateFont("wT.Motd.Header", {

@@ -46,5 +46,24 @@ else
         end
     end
 
+    function wT.Print(str, inChat)
+        if inChat then
+            chat.AddText(
+                Color(62,87,201),
+                "[WiochaTools] ",
+                Color(255,255,255),
+                str
+            )
+        else
+            MsgC(
+                Color(62,87,201),
+                "[WiochaTools] ",
+                Color(255,255,255),
+                str,
+                "\n"
+            )
+        end
+    end
+
     net.Receive("WiochaTools_Print", wT.ReadMsg)
 end
