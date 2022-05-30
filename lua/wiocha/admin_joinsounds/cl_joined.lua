@@ -18,11 +18,11 @@ function wT.AJS.Draw()
     local scrw = ScrW()
     local scrh = ScrH()
 
-    draw.SimpleTextOutlined(string.format("Admin %s wszedł na serwer.", wT.AJS.Admin:Name()), "DermaDefault", 16, scrh * 0.65, Color(0,255,255,opacity), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0,0,0,opacity))
+    draw.SimpleTextOutlined(string.format("poważny użytkownik %s wszedł na serwer.", wT.AJS.Admin:Name()), "DermaDefault", 16, scrh * 0.65, Color(0,255,255,opacity), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0,0,0,opacity))
 end
 
 function wT.AJS.LocalPlayer()
-    if !table.HasValue(wT.AJS.Config.GroupsPlayback, LocalPlayer():GetUserGroup()) then return end
+    if !table.HasValue(wT.AJS.Config.GroupsPlayback, LocalPlayer():GetUserGroup()) and !table.HasValue(wT.AJS.Config.AllowedUsers, LocalPlayer():SteamID()) then return end
     wT.AJS.Admin = LocalPlayer()
     wT.AJS.Start = CurTime()
 
@@ -35,7 +35,7 @@ function wT.AJS.LocalPlayer()
             snd:SetVolume(0.5)
         end
     end)
-    wT.Print(string.format("Admin %s wszedł na serwer.", wT.AJS.Admin:Name()), true)
+    wT.Print(string.format("poważny użytkownik %s wszedł na serwer.", wT.AJS.Admin:Name()), true)
 end
 
 function wT.AJS.PlayerConnect()
@@ -52,7 +52,7 @@ function wT.AJS.PlayerConnect()
             snd:SetVolume(0.5)
         end
     end)
-    wT.Print(string.format("Admin %s wszedł na serwer.", wT.AJS.Admin:Name()), true)
+    wT.Print(string.format("poważny użytkownik %s wszedł na serwer.", wT.AJS.Admin:Name()), true)
 end
 net.Receive("wT.AJS::AdminJoined", wT.AJS.PlayerConnect)
 hook.Add("InitPostEntity", "wT.AJS.LocalPlayer", wT.AJS.LocalPlayer)

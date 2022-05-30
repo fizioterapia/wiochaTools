@@ -4,9 +4,9 @@ util.AddNetworkString("wT.AJS::AdminJoined")
 
 function wT.AJS.PlayerInitialSpawn(ply)
     if !IsValid(ply) then return end
-    if !table.HasValue(wT.AJS.Config.GroupsPlayback, ply:GetUserGroup()) then return end
+    if !table.HasValue(wT.AJS.Config.GroupsPlayback, ply:GetUserGroup()) and !table.HasValue(wT.AJS.Config.AllowedUsers, ply:SteamID()) then return end
 
-    net.Receive("wT.AJS::AdminJoined")
+    net.Start("wT.AJS::AdminJoined")
     net.WriteEntity(ply)
     net.Broadcast()
 end
